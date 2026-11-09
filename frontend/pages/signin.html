@@ -147,6 +147,32 @@
   function passChecks(v) { return { len: v.length >= 8, upper: /[A-Z]/.test(v), num: /[0-9]/.test(v), sym: /[^A-Za-z0-9]/.test(v) }; }
   function passOk(v) { var r = passChecks(v); return r.len && r.upper && r.num && r.sym; }
 
+  // Quick warning for the most common throwaway email services. This is only a convenience:
+  // the server checks every address against the full list (8,000+ domains) and is what actually blocks it.
+  var THROWAWAY = ['mailinator.com','10minutemail.com','guerrillamail.com','guerrillamail.info','sharklasers.com','grr.la',
+    'yopmail.com','temp-mail.org','trashmail.com','getnada.com','maildrop.cc','dispostable.com','throwawaymail.com','mohmal.com',
+    'emailondeck.com','mintemail.com','fakeinbox.com','tempail.com','mailnesia.com','mytemp.email','tempr.email','discard.email',
+    'mail.tm','inboxkitten.com','mailcatch.com','moakt.com','tmpmail.org','emailfake.com','tempmailo.com','1secmail.com',
+    'tempmail.plus','spambox.us'];
+  var THROWAWAY_MSG = 'Please use a permanent email address. Temporary or disposable email addresses are not accepted.';
+  function isThrowaway(v) {
+    var parts = (v.split('@')[1] || '').toLowerCase().split('.');
+    for (var i = 0; i < parts.length - 1; i++) { if (THROWAWAY.indexOf(parts.slice(i).join('.')) !== -1) return true; }
+    return false;
+  }
+  // Returns an error message for the email field, or '' if it looks fine.
+  function emailProblem(input) {
+    var v = input.value.trim();
+    if (!validEmail(v)) return 'Please enter a valid email address.';
+    if (isThrowaway(v)) return THROWAWAY_MSG;
+    return '';
+  }
+  function checkEmail(c, input) {
+    var msg = emailProblem(input);
+    if (msg) { showError(c, msg); flag(input); return false; }
+    return true;
+  }
+
   // Navigation links
   document.addEventListener('click', function (e) {
     var el = e.target.closest('[data-go]'); if (!el) return;
@@ -198,9 +224,11 @@
     $('form', c).addEventListener('submit', function (e) { e.preventDefault(); fn(c); });
   }
 
-  handler('signup', function () { goTo('login'); });
-  handler('login', function () { window.location.href = 'dashboard.html'; });
-  handler('forgot', function () {
+  // Email checks run first; the rest still just moves to the next step until the API is wired in.
+  handler('signup', function (c) { clearErrors(c); if (!checkEmail(c, $('#su-email'))) return; goTo('login'); });
+  handler('login', function (c) { clearErrors(c); if (!checkEmail(c, $('#li-email'))) return; window.location.href = 'dashboard.html'; });
+  handler('forgot', function (c) {
+    clearErrors(c); if (!checkEmail(c, $('#fp-email'))) return;
     var v = $('#fp-email').value.trim();
     if (v) $('#vf-email').textContent = maskEmail(v);
     goTo('verify');
@@ -215,4 +243,4 @@
 })();
 </script>
 </body>
-</html>
+</html>

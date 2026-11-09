@@ -1,0 +1,57 @@
+/* Export format menu (scripts/office-export.js) */
+.ox-menu{
+    position:fixed;
+    z-index:1200;
+    min-width:240px;
+    padding:6px;
+    background:var(--color-card);
+    border:1px solid var(--color-border);
+    border-radius:12px;
+    box-shadow:0 12px 32px rgba(23, 22, 21, .16);
+}
+.ox-menu[hidden]{ display:none; }
+
+.ox-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    padding:8px 10px;
+    border:none;
+    border-radius:8px;
+    background:transparent;
+    font:inherit;
+    text-align:left;
+    color:var(--color-text-primary);
+    cursor:pointer;
+}
+.ox-item:hover,
+.ox-item:focus-visible{ background:var(--color-bg); outline:none; }
+.ox-item:focus-visible{ box-shadow:0 0 0 2px var(--color-primary-ring); }
+
+.ox-badge{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:30px;
+    height:30px;
+    padding:0 4px;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.02em;
+    color:var(--color-on-primary);
+    background:var(--color-text-secondary);
+}
+.ox-badge.ox-docx{ background:var(--color-text-primary); }
+.ox-badge.ox-xlsx{ background:var(--color-success); }
+.ox-badge.ox-pptx{ background:var(--color-primary); }
+.ox-badge.ox-png,
+.ox-badge.ox-svg{ background:var(--color-surface); color:var(--color-text-secondary); font-size:10px; }
+
+.ox-text{ display:flex; flex-direction:column; min-width:0; }
+.ox-text strong{ font-size:13px; font-weight:600; }
+.ox-text small{ font-size:11.5px; color:var(--color-text-tertiary); }
+
+.ox-caret{ width:14px !important; height:14px !important; margin-left:-2px; }

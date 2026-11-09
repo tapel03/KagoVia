@@ -138,17 +138,17 @@
                 <div class="notif-page">
 
                     <div class="notif-toolbar">
-                        <div class="notif-tabs" id="notifTabs">
-                            <button class="notif-tab active" data-tab="all">All (24)</button>
-                            <button class="notif-tab" data-tab="unread"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M10.268 21a2 2 0 0 0 3.464 0'/><path d='M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326'/></svg> Unread (5)</button>
-                            <button class="notif-tab" data-tab="mentions">@ Mentions (2)</button>
-                            <button class="notif-tab" data-tab="alerts"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/><path d='M12 9v4'/><path d='M12 17h.01'/></svg> Alerts (3)</button>
-                            <button class="notif-tab" data-tab="system">System (8)</button>
-                            <button class="notif-tab" data-tab="updates">Project Updates (6)</button>
+                        <div class="notif-tabs" id="notifTabs" role="tablist" aria-label="Show notifications">
+                            <button type="button" role="tab" class="notif-tab active" data-tab="all">All <span class="notif-count"></span></button>
+                            <button type="button" role="tab" class="notif-tab" data-tab="unread"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M10.268 21a2 2 0 0 0 3.464 0'/><path d='M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326'/></svg> Unread <span class="notif-count"></span></button>
+                            <button type="button" role="tab" class="notif-tab" data-tab="mentions">@ Mentions <span class="notif-count"></span></button>
+                            <button type="button" role="tab" class="notif-tab" data-tab="alerts"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/><path d='M12 9v4'/><path d='M12 17h.01'/></svg> Alerts <span class="notif-count"></span></button>
+                            <button type="button" role="tab" class="notif-tab" data-tab="system">System <span class="notif-count"></span></button>
+                            <button type="button" role="tab" class="notif-tab" data-tab="updates">Project Updates <span class="notif-count"></span></button>
                         </div>
                         <div class="notif-toolbar-actions">
-                            <button id="markAllReadPage">✓ Mark all as read</button>
-                            <button id="openFilter"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z'/></svg> Filter</button>
+                            <button type="button" id="markAllReadPage">✓ Mark all as read</button>
+                            
                         </div>
                     </div>
 
@@ -156,87 +156,11 @@
 
                         <div class="notif-list-col">
 
-                            <div class="notif-item" data-detail="material">
-                                <span class="notif-item-icon blue"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/><path d='M16 3.128a4 4 0 0 1 0 7.744'/><path d='M22 21v-2a4 4 0 0 0-3-3.87'/><circle cx='9' cy='7' r='4'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>Sarah Parker invited you to join the project "Modern Family Home"</strong>
-                                    <p>You have been added as an Estimator.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>5 minutes ago</span><span class="notif-unread-dot"></span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="estimate">
-                                <span class="notif-item-icon green"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z'/><path d='M14 2v5a1 1 0 0 0 1 1h5'/><path d='M10 9H8'/><path d='M16 13H8'/><path d='M16 17H8'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>New estimate completed for "Beach House Project"</strong>
-                                    <p>The total estimated cost is R2,345,678. <a href="estimator.html">View estimate ›</a></p>
-                                </div>
-                                <div class="notif-item-meta"><span>1 hour ago</span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="material">
-                                <span class="notif-item-icon orange"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z'/><path d='M12 22V12'/><polyline points='3.29 7 12 12 20.71 7'/><path d='m7.5 4.27 9 5.15'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>Material price updated</strong>
-                                    <p>Cement (32.5N) price increased by 5.2% from BuildMart.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>2 hours ago</span><span class="notif-unread-dot"></span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="mention">
-                                <span class="notif-item-icon purple"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>Michael Johnson mentioned you in a comment</strong>
-                                    <p>@Moses Please review the updated floor plan.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>3 hours ago</span><span class="notif-unread-dot"></span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="project">
-                                <span class="notif-item-icon blue"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>Project "Office Building" status changed to In Progress</strong>
-                                    <p>The project has moved to the execution phase.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>5 hours ago</span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="supplier">
-                                <span class="notif-item-icon green"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2'/><path d='M15 18H9'/><path d='M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14'/><circle cx='17' cy='18' r='2'/><circle cx='7' cy='18' r='2'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>New supplier "BuildIt Hardware" added</strong>
-                                    <p>You can now source materials from BuildIt Hardware.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>1 day ago</span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="system">
-                                <span class="notif-item-icon gray"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M10.268 21a2 2 0 0 0 3.464 0'/><path d='M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>System maintenance scheduled</strong>
-                                    <p>The system will be under maintenance on 18 May 2024 from 02:00 AM to 04:00 AM.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>2 days ago</span></div>
-                            </div>
-
-                            <div class="notif-item" data-detail="material">
-                                <span class="notif-item-icon orange"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg></span>
-                                <div class="notif-item-body">
-                                    <strong>Lisa Wang updated material prices for Gauteng region</strong>
-                                    <p>125 materials were updated.</p>
-                                </div>
-                                <div class="notif-item-meta"><span>2 days ago</span></div>
-                            </div>
+                            <div id="notifList" aria-live="polite"></div>
 
                             <div class="notif-pagination">
-                                <span>Showing 1 to 8 of 24 notifications</span>
-                                <div class="notif-pagination-btns">
-                                    <button>‹</button>
-                                    <button class="active">1</button>
-                                    <button>2</button>
-                                    <button>3</button>
-                                    <button>›</button>
-                                </div>
+                                <span id="notifRange"></span>
+                                <nav class="notif-pagination-btns" id="notifPages" aria-label="Notification pages"></nav>
                             </div>
 
                         </div>
@@ -247,24 +171,24 @@
                                 <h5>Notification Summary</h5>
                                 <div class="notif-summary-grid">
                                     <div class="notif-summary-cell">
-                                        <strong>24</strong>
+                                        <strong id="sumTotal">24</strong>
                                         <span>Total Notifications</span>
-                                        <small class="green">+12% this week</small>
+                                        <small>All notifications</small>
                                     </div>
                                     <div class="notif-summary-cell">
-                                        <strong>5</strong>
+                                        <strong id="sumUnread">5</strong>
                                         <span>Unread</span>
-                                        <small class="link">View unread</small>
+                                        <button type="button" class="link summary-link" id="viewUnread">View unread</button>
                                     </div>
                                     <div class="notif-summary-cell">
-                                        <strong class="orange-text">3</strong>
+                                        <strong class="orange-text" id="sumAlerts">3</strong>
                                         <span>Alerts</span>
-                                        <small class="orange-text">Requires attention</small>
+                                        <button type="button" class="orange-text summary-link" id="viewAlerts">View alerts</button>
                                     </div>
                                     <div class="notif-summary-cell">
-                                        <strong>2</strong>
+                                        <strong id="sumMentions">2</strong>
                                         <span>Mentions</span>
-                                        <small>You were mentioned</small>
+                                        <button type="button" class="link summary-link" id="viewMentions">View mentions</button>
                                     </div>
                                 </div>
                             </div>
@@ -306,24 +230,13 @@
 
     <!-- View Full Notification modal -->
     <div class="modal-overlay" id="detailModal">
-        <div class="modal-box notif-modal-box">
+        <div class="modal-box notif-modal-box" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
             <div class="notif-modal-header">
-                <h3><span class="notif-modal-icon"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z'/><path d='M12 22V12'/><polyline points='3.29 7 12 12 20.71 7'/><path d='m7.5 4.27 9 5.15'/></svg></span> Material Price Updated</h3>
-                <button class="modal-close-x" data-close="detailModal">✕</button>
+                <h3><span class="notif-modal-icon" id="detailIcon"></span> <span id="detailTitle"></span></h3>
+                <button class="modal-close-x" data-close="detailModal" aria-label="Close">✕</button>
             </div>
-
-            <div class="notif-detail-rows">
-                <div class="notif-detail-row"><span>Cement (32.5N) price has been updated.</span></div>
-                <div class="notif-detail-row"><span>Supplier</span><strong>BuildMart</strong></div>
-                <div class="notif-detail-row"><span>Old Price</span><strong>R78.50 / bag</strong></div>
-                <div class="notif-detail-row"><span>New Price</span><strong>R82.60 / bag</strong></div>
-                <div class="notif-detail-row"><span>Change</span><strong class="orange-text">+5.2%</strong></div>
-                <div class="notif-detail-row"><span>Effective Date</span><strong>15 May 2024, 10:30 AM</strong></div>
-                <div class="notif-detail-row"><span>Region</span><strong>Gauteng</strong></div>
-            </div>
-
-            <p class="notif-detail-warning">This change may affect your active estimates.</p>
-
+            <div class="notif-detail-rows" id="detailRows"></div>
+            <p class="notif-detail-warning" id="detailWarning" hidden></p>
             <button class="modal-submit-btn full" data-close="detailModal">Got it</button>
         </div>
     </div>
@@ -344,31 +257,7 @@
         </div>
     </div>
 
-    <!-- Filter Notifications modal -->
-    <div class="modal-overlay" id="filterModal">
-        <div class="modal-box">
-            <div class="notif-modal-header">
-                <h3>Filter Notifications</h3>
-                <button class="modal-close-x" data-close="filterModal">✕</button>
-            </div>
-
-            <div class="modal-field">
-                <label>Type</label>
-                <select><option>All Types</option><option>Mentions</option><option>Alerts</option><option>System</option><option>Project Updates</option></select>
-            </div>
-            <div class="modal-field">
-                <label>Status</label>
-                <select><option>All Status</option><option>Unread</option><option>Read</option></select>
-            </div>
-            <div class="modal-field">
-                <label>Date Range</label>
-                <input type="text" placeholder="Select date range">
-            </div>
-
-            <button class="modal-submit-btn full" data-close="filterModal">Apply Filters</button>
-            <button class="modal-text-btn full" data-close="filterModal">Clear Filters</button>
-        </div>
-    </div>
+    
 
     <!-- Notification Preferences modal -->
     <div class="modal-overlay" id="prefsModal">
@@ -422,48 +311,6 @@
         </div>
     </div>
 
-    <script>
-
-
-        // Notif tabs
-        document.querySelectorAll(".notif-tab").forEach(tab => {
-            tab.addEventListener("click", () => {
-                document.querySelectorAll(".notif-tab").forEach(t => t.classList.remove("active"));
-                tab.classList.add("active");
-            });
-        });
-
-        // Mark all as read: drop the unread dots
-        function markAllRead(){
-            document.querySelectorAll(".notif-unread-dot, .notif-dd-dot").forEach(d => d.remove());
-        }
-        document.getElementById("markAllReadPage").addEventListener("click", markAllRead);
-
-        // Generic modal open/close
-        function openModal(id){ document.getElementById(id).classList.add("open"); }
-        function closeModal(id){ document.getElementById(id).classList.remove("open"); }
-
-        document.querySelectorAll(".modal-overlay").forEach(overlay => {
-            overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.classList.remove("open"); });
-        });
-        document.querySelectorAll("[data-close]").forEach(btn => {
-            btn.addEventListener("click", () => closeModal(btn.dataset.close));
-        });
-
-        // Clicking a notification opens the detail modal
-        document.querySelectorAll(".notif-item").forEach(item => {
-            item.addEventListener("click", () => openModal("detailModal"));
-        });
-
-        // Filter / preferences / clear-all triggers
-        document.getElementById("openFilter").addEventListener("click", () => openModal("filterModal"));
-        document.getElementById("openEmailPrefs").addEventListener("click", () => openModal("prefsModal"));
-        document.getElementById("openClearAll").addEventListener("click", () => openModal("clearAllModal"));
-
-        document.getElementById("confirmClearAll").addEventListener("click", () => {
-            document.querySelectorAll(".notif-item").forEach(el => el.remove());
-            closeModal("clearAllModal");
-        });
-    </script>
+    <script src="../scripts/notifications.js"></script>
 </body>
-</html>
+</html>

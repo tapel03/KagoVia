@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="../../styles/dash.css">
     <link rel="stylesheet" href="../../styles/admin.css">
     <link rel="stylesheet" href="../../styles/admin-extra.css">
+    <link rel="stylesheet" href="../../styles/office-export.css">
 </head>
 <body data-title="Audit logs">
     <main class="admin-page" id="app"></main>
 
     <script src="../../scripts/admin-shell.js"></script>
+    <script src="../../scripts/office-export.js"></script>
     <script src="../../scripts/admin-ui.js"></script>
     <script>
         var app = document.getElementById('app');
@@ -26,7 +28,7 @@
         AdminUI.crud(document.getElementById('logs'), {
             title: 'Audit log',
             readOnly: true,
-            export: true,
+            export: ['xlsx', 'docx'],
             columns: [
                 { key: 'time', label: 'Time' },
                 { key: 'admin', label: 'Admin', filter: true },
@@ -62,4 +64,4 @@
         });
     </script>
 </body>
-</html>
+</html>

@@ -202,7 +202,7 @@
 
                         <header class="Projects-details-header">
                             <div class="detail-header-left">
-                                <button class="back-btn" id="detailBack" title="Back to list">←</button>
+                                <button type="button" class="back-btn" id="detailBack" title="Back to list" aria-label="Back to project list">←</button>
                                 <div class="detail-title-block">
                                     <div class="detail-title-row">
                                         <h3 id="detailName">Modern Villa</h3>
@@ -213,7 +213,7 @@
                             </div>
 
                             <div class="detail-header-actions">
-                                <button class="detail-btn" id="shareBtn">⇗ Share</button>
+                                <button type="button" class="detail-btn" id="shareBtn" aria-haspopup="dialog"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M7 17 17 7'/><path d='M7 7h10v10'/></svg> Share</button>
                                 <button class="detail-btn" id="editProjectBtn"><svg class='ico-inline' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z'/><path d='m15 5 4 4'/></svg> Edit Project</button>
                                 <button class="detail-btn icon-only" id="moreBtn">⋯</button>
                             </div>
@@ -534,6 +534,29 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Share Project modal -->
+    <div class="modal-overlay" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+        <div class="modal-box share-modal-box">
+            <h3 id="shareTitle">Share project</h3>
+            <p class="share-sub" id="shareSub">Anyone with the link and access to KagoBuild can view this project.</p>
+            <div class="modal-field">
+                <label for="shareLink">Project link</label>
+                <div class="share-link-row">
+                    <input type="text" id="shareLink" readonly>
+                    <button type="button" class="modal-submit-btn" id="shareCopy">Copy link</button>
+                </div>
+            </div>
+            <div class="share-options">
+                <a class="share-option" id="shareEmail" href="#">Email</a>
+                <a class="share-option" id="shareWhatsApp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+                <button type="button" class="share-option" id="shareNative" hidden>More apps</button>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-cancel-btn" id="shareClose">Close</button>
+            </div>
         </div>
     </div>
 
@@ -1820,8 +1843,49 @@
 
     document.getElementById("editProjectBtn").addEventListener("click", () => openEditProjectModal(selectedProjectId));
 
-    document.getElementById("shareBtn").addEventListener("click", () => {
-        showToast("Share link copied (demo only)");
+    // Share: real link to this project (deep link opens it), copy, email, WhatsApp
+    const shareModal = document.getElementById("shareModal");
+    const shareLink = document.getElementById("shareLink");
+    function projectUrl(id) {
+        const u = new URL(window.location.href);
+        u.search = "?project=" + encodeURIComponent(id);
+        u.hash = "";
+        return u.toString();
+    }
+    function openShare() {
+        const p = projectsData[selectedProjectId];
+        if (!p) return;
+        const url = projectUrl(selectedProjectId);
+        const text = "Have a look at " + p.name + " on KagoBuild: " + url;
+        document.getElementById("shareTitle").textContent = "Share " + p.name;
+        shareLink.value = url;
+        document.getElementById("shareEmail").href = "mailto:?subject=" + encodeURIComponent(p.name + " on KagoBuild") + "&body=" + encodeURIComponent(text);
+        document.getElementById("shareWhatsApp").href = "https://wa.me/?text=" + encodeURIComponent(text);
+        document.getElementById("shareNative").hidden = !navigator.share;
+        shareModal.classList.add("open");
+        shareLink.focus();
+        shareLink.select();
+    }
+    function closeShare() {
+        shareModal.classList.remove("open");
+        document.getElementById("shareBtn").focus();
+    }
+    document.getElementById("shareBtn").addEventListener("click", openShare);
+    document.getElementById("shareClose").addEventListener("click", closeShare);
+    shareModal.addEventListener("click", (e) => { if (e.target === shareModal) closeShare(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && shareModal.classList.contains("open")) closeShare(); });
+    document.getElementById("shareCopy").addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(shareLink.value);
+        } catch (err) {
+            shareLink.select();
+            document.execCommand("copy");
+        }
+        showToast("Link copied");
+    });
+    document.getElementById("shareNative").addEventListener("click", () => {
+        const p = projectsData[selectedProjectId];
+        navigator.share({ title: p.name, text: p.name + " on KagoBuild", url: shareLink.value }).catch(() => {});
     });
 
     document.getElementById("moreBtn").addEventListener("click", () => openEditProjectModal(selectedProjectId, "settings"));
@@ -1899,9 +1963,14 @@
     // =================================================================
 
     renderTable();
-    selectProject("modern-villa");
+    // Deep link from a shared URL: projects.html?project=<id>
+    const linked = new URLSearchParams(window.location.search).get("project");
+    selectProject(linked && projectsData[linked] ? linked : "modern-villa");
+    if (linked && projectsData[linked]) {
+        document.querySelector(".Projects-details").scrollIntoView({ block: "start" });
+    }
 
     </script>
 
 </body>
-</html>
+</html>

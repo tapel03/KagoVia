@@ -246,6 +246,7 @@
 
     <div class="rm-toast" id="rmToast" role="status" aria-live="polite"></div>
 
+    <script src="../scripts/office-export.js"></script>
     <script>
     (function(){
         // ---------------------------------------------------------------
@@ -560,9 +561,10 @@
                 blob = buildPdf(rows.map(([k,v]) => k + ": " + v));
                 ext = "pdf";
             } else {
-                const csv = [["Field","Value"]].concat(rows).map(row => row.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(",")).join("\r\n");
-                blob = new Blob(["\ufeff" + csv], { type:"text/csv" });
-                ext = "csv";
+                // Excel reports download as a real .xlsx workbook
+                OfficeExport.xlsx(base, { title:r.name, sheets:[{ name:r.name, cols:["Field","Value"], rows:rows }] });
+                toast("Downloading " + base + ".xlsx");
+                return;
             }
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -742,4 +744,4 @@
     </script>
 
 </body>
-</html>
+</html>

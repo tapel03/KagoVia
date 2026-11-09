@@ -400,3 +400,18 @@
 .settings-card-sub{ margin:2px 0 10px; font-size:12px; color:var(--color-text-secondary); }
 .settings-link-row{ display:inline-block; margin-top:10px; font-size:12.5px; font-weight:700; color:var(--color-primary); text-decoration:none; }
 .settings-link-row:hover{ text-decoration:underline; }
+
+/* Data-driven list states */
+.notif-item.is-unread .notif-item-body strong{ color:var(--color-text-primary); }
+.notif-item:focus-visible{ outline:2px solid var(--color-primary); outline-offset:-2px; }
+.notif-list-col #notifList .notif-item:last-child{ border-bottom:1px solid var(--color-border); }
+.notif-empty{ padding:40px 18px; text-align:center; color:var(--color-text-secondary); font-size:13px; }
+.notif-empty strong{ display:block; color:var(--color-text-primary); font-size:14px; margin-bottom:4px; }
+.notif-empty p{ margin:0; }
+.notif-pagination-btns button:disabled{ opacity:.4; cursor:not-allowed; }
+.notif-pagination-btns button:not(:disabled):not(.active):hover{ background:var(--color-bg); }
+.notif-count{ font-weight:500; }
+.summary-link{ background:none; border:0; padding:0; font:inherit; font-size:11px; cursor:pointer; text-align:left; }
+.summary-link.link{ color:var(--color-primary); }
+.summary-link:hover{ text-decoration:underline; }
+@media (max-width:600px){ .notif-pagination{ flex-direction:column; gap:10px; align-items:flex-start; } .notif-pagination-btns{ flex-wrap:wrap; } }

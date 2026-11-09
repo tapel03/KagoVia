@@ -353,6 +353,7 @@
     <div class="popover" id="popover" role="menu"></div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+    <script src="../scripts/office-export.js"></script>
     <script>
 
         /* =====================================================
@@ -621,27 +622,27 @@
 
         $("exportBtn").addEventListener("click", e => {
             openMenu(e.currentTarget, [
-                { label: "Download CSV", icon: "download", onClick: exportCSV },
+                { label: "Excel spreadsheet (.xlsx)", icon: "download", onClick: () => exportList("xlsx") },
+                { label: "Word document (.docx)", icon: "download", onClick: () => exportList("docx") },
                 { label: "Print list", icon: "printer", onClick: () => window.print() }
             ]);
         });
 
-        function exportCSV() {
+        function exportList(fmt) {
             const list = getVisible();
             if (!list.length) { showToast("There is nothing to export."); return; }
-            const cell = v => `"${String(v).replace(/"/g, '""')}"`;
             const head = ["ID","Material","Category","Supplier","Unit","Unit Price (Excl. VAT)","Stock","Status","Reorder Level","Total Value","Last Updated","Updated By","Notes"];
             const rows = list.map(m => [m.id, m.name, m.category, m.supplier, m.unit, m.price.toFixed(2), m.stock, STATUS_LABEL[statusOf(m)], m.reorder, valueOf(m).toFixed(2), m.updated, m.by, m.notes]);
-            const csv = [head, ...rows].map(r => r.map(cell).join(",")).join("\r\n");
-            const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "materials.csv";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-            showToast(`Exported ${list.length} material${list.length === 1 ? "" : "s"} to CSV.`);
+            if (fmt === "xlsx") {
+                OfficeExport.xlsx("materials", { title: "Materials", sheets: [{ name: "Materials", cols: head, rows }] });
+            } else {
+                // Word: the columns people read; full detail lives in the Excel export
+                const pick = [1, 2, 3, 4, 5, 6, 7, 9];
+                OfficeExport.docx("materials", { title: "Materials list", subtitle: list.length + " materials, prices excl. VAT", blocks: [
+                    { table: { cols: pick.map(i => head[i]), rows: rows.map(r => pick.map(i => r[i])) } }
+                ] });
+            }
+            showToast(`Exported ${list.length} material${list.length === 1 ? "" : "s"} to ${fmt === "xlsx" ? "Excel" : "Word"}.`);
         }
 
         /* =====================================================
@@ -817,4 +818,4 @@
         render();
     </script>
 </body>
-</html>
+</html>

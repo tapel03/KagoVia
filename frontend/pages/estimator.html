@@ -177,7 +177,8 @@
                                     <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg>Export<svg class="ico" aria-hidden="true"><use href="#i-chevron"/></svg>
                                 </button>
                                 <div class="est-menu" id="exportMenu" role="menu" hidden>
-                                    <button type="button" role="menuitem" data-act="csv"><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg>Download CSV</button>
+                                    <button type="button" role="menuitem" data-act="docx"><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg>Word document (.docx)</button>
+                                    <button type="button" role="menuitem" data-act="xlsx"><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg>Excel spreadsheet (.xlsx)</button>
                                     <button type="button" role="menuitem" data-act="print"><svg class="ico" aria-hidden="true"><use href="#i-print"/></svg>Print / Save as PDF</button>
                                 </div>
                             </div>
@@ -392,6 +393,7 @@
 
     <div class="est-toast" id="estToast" role="status" aria-live="polite"></div>
 
+    <script src="../scripts/office-export.js"></script>
     <script>
     (function(){
         const CURRENT_USER = "Moses";
@@ -755,18 +757,28 @@
             openModal("Risk analysis", `<p class="em-note">Overall risk: <strong class="lv ${r.lvl.cls}">${r.lvl.t}</strong>. ${esc(r.lvl.p)}</p><ul class="rk-list">${items}</ul>`, [{label:"Close",cls:"primary"}]);
         }
 
-        function exportCsv(){
-            const c = calc(), q = v => '"' + String(v).replace(/"/g,'""') + '"';
-            const rows = [["Section","Item","Quantity","Unit","Unit price (ZAR)","Cost (ZAR)"]];
-            S.materials.forEach(m => rows.push(["Materials", m.name, m.qty, m.unit, m.price.toFixed(2), (m.qty * m.price).toFixed(2)]));
-            S.fixed.forEach(f => rows.push(["Other costs", f.label, "", "", "", f.amount.toFixed(2)]));
-            rows.push([], ["","Total estimated cost","","","",c.total.toFixed(2)], ["","Budget","","","",S.budget.toFixed(2)]);
-            const csv = rows.map(r => r.map(q).join(",")).join("\r\n");
-            const url = URL.createObjectURL(new Blob(["\ufeff" + csv], { type:"text/csv" }));
-            const a = document.createElement("a"); a.href = url; a.download = "cost-estimate.csv";
-            document.body.appendChild(a); a.click(); a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-            toast("Downloading cost-estimate.csv");
+        function exportOffice(fmt){
+            const c = calc(), R = v => Number(v).toFixed(2);
+            const matRows = S.materials.map(m => [m.name, m.qty, m.unit, R(m.price), R(m.qty * m.price)]);
+            const otherRows = S.fixed.map(f => [f.label, R(f.amount)]);
+            const summary = [["Total estimated cost (ZAR)", R(c.total)], ["Budget (ZAR)", R(S.budget)], ["Difference (ZAR)", R(S.budget - c.total)]];
+            const name = "cost-estimate";
+            if (fmt === "xlsx"){
+                OfficeExport.xlsx(name, { title:"Cost estimate", sheets:[
+                    { name:"Materials", cols:["Item","Quantity","Unit","Unit price (ZAR)","Cost (ZAR)"], rows:matRows },
+                    { name:"Other costs", cols:["Item","Cost (ZAR)"], rows:otherRows },
+                    { name:"Summary", cols:["Item","Value"], rows:summary }
+                ]});
+                toast("Downloading cost-estimate.xlsx");
+            } else {
+                OfficeExport.docx(name, { title:"Cost estimate", subtitle:"Planning estimate in ZAR", blocks:[
+                    { h:"Summary" }, { table:{ cols:["Item","Value"], rows:summary } },
+                    { h:"Materials" }, { table:{ cols:["Item","Quantity","Unit","Unit price (ZAR)","Cost (ZAR)"], rows:matRows } },
+                    { h:"Other costs" }, { table:{ cols:["Item","Cost (ZAR)"], rows:otherRows } },
+                    { p:"This is a planning estimate, not a quotation. Confirm prices with suppliers before buying." }
+                ]});
+                toast("Downloading cost-estimate.docx");
+            }
         }
 
         const menu = $("#exportMenu"), expBtn = document.querySelector('[data-act="export"]');
@@ -790,7 +802,7 @@
             switch (a.dataset.act){
                 case "save":   saveEstimate(); break;
                 case "export": menu.hidden = !menu.hidden; expBtn.setAttribute("aria-expanded", menu.hidden ? "false" : "true"); break;
-                case "csv":    closeMenu(); exportCsv(); break;
+                case "docx": case "xlsx": closeMenu(); exportOffice(a.dataset.act); break;
                 case "print":  closeMenu(); window.print(); break;
                 case "goto-breakdown": setTab("breakdown"); break;
                 case "dec": case "inc":
@@ -837,4 +849,4 @@
     })();
     </script>
 </body>
-</html>
+</html>

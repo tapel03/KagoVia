@@ -144,15 +144,6 @@ window.AdminUI = (function () {
         }).join('') + '</section>';
     }
 
-    function download(name, text) {
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv' }));
-        a.download = name;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    }
-
     /* ----- Row "more" menus (shared by every CRUD table) ----- */
     function closeRowMenus(except) {
         document.querySelectorAll('.kb-row-pop.open').forEach(function (p) {
@@ -201,6 +192,7 @@ window.AdminUI = (function () {
         var rows = cfg.rows.map(function (r) { return Object.assign({}, r); });
         var cols = cfg.columns;
         var st = { q: '', f: {} };
+        var visible = [];
 
         var labels = function (c) {
             if (c.type === 'status') return c.options.map(function (o) { return o[0]; });
@@ -230,7 +222,9 @@ window.AdminUI = (function () {
                 }).join('') +
                 '<span class="spacer"></span>' +
                 extras.map(function (x, i) { return '<button class="btn" data-x="' + i + '">' + esc(x.label) + '</button>'; }).join('') +
-                (cfg.export ? '<button class="btn" data-export>Export CSV</button>' : '') +
+                (cfg.export ? '<button type="button" class="btn btn-export" data-export>' +
+                    '<svg class="ico-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>' +
+                    'Export<svg class="ico-inline ox-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>' : '') +
                 (cfg.readOnly ? '' : '<button class="btn primary" data-add>+ ' + esc(cfg.addLabel || 'Add') + '</button>') +
             '</div>' +
             '<div class="table-wrap"><table class="admin-table kb-cards"><thead><tr>' +
@@ -278,6 +272,7 @@ window.AdminUI = (function () {
                 return '<tr>' + tds + (hasActions ? '<td class="actions">' + menu + '</td>' : '') + '</tr>';
             }).join('') : '<tr><td class="empty" colspan="' + (cols.length + 1) + '">No results found</td></tr>';
             root.querySelector('[data-count]').textContent = list.length + ' of ' + rows.length;
+            visible = list;
         }
 
         var fields = cols.filter(function (c) { return !c.noForm; }).map(function (c) {
@@ -300,14 +295,28 @@ window.AdminUI = (function () {
             b.onclick = function () { extras[+b.getAttribute('data-x')].run(api); };
         });
 
+        /* Export: Excel / Word / PowerPoint (no CSV). cfg.export can be true
+           (all three) or a list of formats, e.g. ['xlsx', 'docx']. Exports the
+           rows currently shown, so search and filters apply. */
         var exp = root.querySelector('[data-export]');
-        if (exp) exp.onclick = function () {
-            var q = function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; };
-            var csv = [cols.map(function (c) { return q(c.label); }).join(',')]
-                .concat(rows.map(function (r) { return cols.map(function (c) { return q(r[c.key]); }).join(','); })).join('\n');
-            download(cfg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.csv', csv);
-            toast('Exported ' + rows.length + ' rows');
-        };
+        if (exp && window.OfficeExport) {
+            var fmts = Array.isArray(cfg.export) ? cfg.export : ['xlsx', 'docx', 'pptx'];
+            OfficeExport.menu(exp, fmts.map(function (f) {
+                return { fmt: f, run: function (fmt) {
+                    var list = visible.map(function (i) { return rows[i]; });
+                    if (!list.length) { toast('Nothing to export'); return; }
+                    var name = 'kagobuild-' + cfg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                    var filtered = list.length < rows.length;
+                    OfficeExport.table(fmt, name, {
+                        title: cfg.title,
+                        subtitle: list.length + ' row' + (list.length === 1 ? '' : 's') + (filtered ? ' (filtered)' : ''),
+                        cols: cols.map(function (c) { return c.label; }),
+                        rows: list.map(function (r) { return cols.map(function (c) { return r[c.key]; }); })
+                    });
+                    toast('Exported ' + list.length + ' row' + (list.length === 1 ? '' : 's') + ' to ' + ({ xlsx: 'Excel', docx: 'Word', pptx: 'PowerPoint' })[fmt]);
+                } };
+            }));
+        }
 
         var add = root.querySelector('[data-add]');
         if (add) add.onclick = function () {
@@ -387,4 +396,4 @@ window.AdminUI = (function () {
     }
 
     return { esc: esc, el: el, toast: toast, info: info, form: form, kpis: kpis, crud: crud, chart: chart, openModal: openModal };
-})();
+})();

@@ -2081,3 +2081,19 @@
         grid-template-columns:1fr;
     }
 }
+/* Share project dialog */
+.share-modal-box{ width:min(480px, 94vw); }
+.share-sub{ margin:-6px 0 14px; font-size:13px; color:var(--color-text-secondary); }
+.share-link-row{ display:flex; gap:8px; align-items:stretch; }
+.share-link-row input{ flex:1; min-width:0; }
+.share-link-row .modal-submit-btn{ flex-shrink:0; white-space:nowrap; height:auto; padding:0 16px; border-radius:10px; font-weight:600; }
+.share-options{ display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 4px; }
+.share-option{
+    display:inline-flex; align-items:center; height:36px; padding:0 14px;
+    border:1px solid var(--color-border); border-radius:10px; background:var(--color-card);
+    font:inherit; font-size:13px; font-weight:600; color:var(--color-text-primary);
+    text-decoration:none; cursor:pointer;
+}
+.share-option:hover{ border-color:var(--color-border-strong); }
+.share-option[hidden]{ display:none; }
+#shareBtn .ico-inline{ width:15px; height:15px; }
