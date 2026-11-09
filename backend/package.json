@@ -1,0 +1,37 @@
+{
+  "name": "kagobuild-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KagoBuild API and workers: Fastify 5 modular monolith",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "worker": "node src/worker.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "node scripts/migrate.js",
+    "test": "node --test --test-concurrency=1 --test-timeout=60000 'test/*.test.js'",
+    "check": "node scripts/check.js"
+  },
+  "dependencies": {
+    "@fastify/cookie": "11.1.5",
+    "@fastify/cors": "11.4.1",
+    "@fastify/helmet": "13.2.0",
+    "@fastify/rate-limit": "11.2.2",
+    "@fastify/static": "10.1.10",
+    "@fastify/websocket": "11.3.7",
+    "bullmq": "5.81.5",
+    "disposable-email-domains-js": "1.26.0",
+    "fastify": "5.12.8",
+    "fastify-plugin": "6.0.1",
+    "ioredis": "5.11.1",
+    "jose": "6.2.15",
+    "pg": "8.23.1",
+    "pino": "10.4.0"
+  },
+  "devDependencies": {
+    "ws": "8.22.1"
+  }
+}
